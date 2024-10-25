@@ -4,6 +4,7 @@ const PORT = 3000;
 
 app.get("/", (req, res) => {
   res.send("Welcome to My Node.js App!");
+  res.send("Checking auto-execution");
 });
 
 app.listen(PORT, () => {
