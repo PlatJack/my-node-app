@@ -1,5 +1,15 @@
 pipeline {
     agent any
+    environment {
+        GROOVY_HOME = tool name: 'Groovy-2.4.9', type: 'hudson.plugins.groovy.GroovyInstallation'
+    }
+    stages {
+        stage('Run Groovy') {
+            steps {
+                bat "${groovy_home}/bin/groovy <script.name>"
+            }
+        }
+    }
     tools {
         nodejs 'NodeJS' // Name of your NodeJS installation in Jenkins
     }
