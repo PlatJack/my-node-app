@@ -1,44 +1,25 @@
 pipeline {
     agent any
-    environment {
-        GROOVY_HOME = tool name: 'Groovy-2.4.9', type: 'hudson.plugins.groovy.GroovyInstallation'
-    }
-    tools {
-        jenkins.plugins.nodejs.tools.NodeJSInstallation '18.14.0'
-        nodejs 'NodeJS'
-    }
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                git url: 'https://github.com/PlatJack/my-node-app.git',
-                branch: 'master'
+                git url: 'https://github.com/PlatJack/my-node-app.git', branch: 'master'
             }
         }
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'  // On Windows, use 'bat' instead of 'sh'
             }
         }
-        stage('Build with Maven') {
+        stage('Run Tests') {
             steps {
-                sh 'mvn clean package'
+                bat 'npm test'
             }
         }
-        stage('Run Selenium Tests') {
+        stage('Build Application') {
             steps {
-                sh 'mvn test -Dtest=YourSeleniumTestClass'
+                bat 'npm run build'
             }
-        }
-    }
-    post {
-        success {
-            echo 'Build and tests were successful!'
-        }
-        failure {
-            echo 'Build or tests failed!'
-        }
-        always {
-            echo 'Cleaning up...'
         }
     }
 }
