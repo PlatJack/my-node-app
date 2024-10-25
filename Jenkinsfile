@@ -11,17 +11,18 @@ pipeline {
                 bat 'npm install'
             }
         }
+        stage('Run Server for 1 Minute') {
+            steps {
+                script {
+                    def server = bat(script: 'start /B npm start', returnStatus: true)
+                    sleep(60)
+                    bat 'taskkill /F /IM node.exe'
+                }
+            }
+        }
         stage('Run Tests') {
             steps {
                 bat 'npm test'
-            }
-        }
-        stage('Run Server for 1 Minute') {
-            steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    bat 'npm start'
-                }
-                bat 'taskkill /F /IM node.exe'
             }
         }
     }
