@@ -8,12 +8,20 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'  // On Windows, use 'bat' instead of 'sh'
+                bat 'npm install'
             }
         }
         stage('Run Tests') {
             steps {
                 bat 'npm test'
+            }
+        }
+        stage('Run Server for 1 Minute') {
+            steps {
+                timeout(time: 1, unit: 'MINUTES') {
+                    bat 'npm start'
+                }
+                bat 'taskkill /F /IM node.exe'
             }
         }
     }
